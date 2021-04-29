@@ -1,0 +1,16 @@
+<view class="main">
+  <view class="form-box">
+    <form bindsubmit="formSubmit">
+      <input type="text" value="{{address.name}}" name="name" placeholder="请输入收货人姓名" />
+      <input type="digit" name="phone" value="{{address.phone}}" placeholder="请输入电话号码" />
+      <picker mode="region">
+
+      </picker>
+      <view>备注：</view>
+      <view class='message'>
+        <textarea name="message" value="{{address.message}}"></textarea>
+      </view>
+      <button form-type="submit" type="primary">保存</button>
+    </form>
+  </view>
+</view>
