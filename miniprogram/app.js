@@ -2,7 +2,6 @@
 import {showToast} from './utils/toll.js'
 App({
   onLaunch: function () {
-
     // 初始化 云开发
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
@@ -30,164 +29,79 @@ App({
 
 
   // 判断购物车中是否有重复后添加购物车
-  isNotRepeteToCart: function (newCartItem) {
-    const self = this
-    var isRepete = function() {
-      var p = new Promise((resolve, reject) => {
-        var flag = false
-        self.globalData.carts.forEach((v) => {
-          if (v._id === newCartItem._id) {
-            flag = true
-          }
-        })
-        resolve(flag)
-      })
-      return p;
-    }
-    console.log(this.globalData.carts)
-    isRepete().then((flag) => {
-      if(flag) showToast({title: "已存在"})
-      else{
-        this.globalData.carts.push(newCartItem)
-      }
+  isRepet: function (item) {
+    let flag = false;
+    this.globalData.carts.forEach(v => {
+      if (v._id === item._id) flag = true;
     })
-  },
-
-  // 随机数生成函数
-  RndNum: function(){
-    return Math.random().toString(32).substr(2, 15);
-  },
-
-  // 获取时间戳
-  CurrentTime: function() {
-    var now = new Date();
-    var year = now.getFullYear();       //年
-    var month = now.getMonth() + 1;     //月
-    var day = now.getDate();            //日
-    var hh = now.getHours();            //时
-    var mm = now.getMinutes();          //分
-    var ss = now.getSeconds();           //秒
-
-    var clock = year.toString();
-    if (month < 10) clock += "0";
-    clock += month;
-    if (day < 10) clock += "0";
-    clock += day;
-    if (hh < 10) clock += "0";
-    clock += hh;
-    if (mm < 10) clock += '0';
-    clock += mm;
-    if (ss < 10) clock += '0';
-    clock += ss;
-    return (clock);
-  },
-
-  CurrentTime_show: function () {
-    var now = new Date();
-    var year = now.getFullYear();       //年
-    var month = now.getMonth() + 1;     //月
-    var day = now.getDate();            //日
-    var hh = now.getHours();            //时
-    var mm = now.getMinutes();          //分
-    var ss = now.getSeconds();           //秒
-
-    var clock = year.toString()+"-";
-    if (month < 10) clock += "0";
-    clock += month+"-";
-    if (day < 10) clock += "0";
-    clock += day+" ";
-    if (hh < 10) clock += "0";
-    clock += hh+":";
-    if (mm < 10) clock += '0';
-    clock += mm+":";
-    if (ss < 10) clock += '0';
-    clock += ss;
-
-    return (clock);
+    flag ? "" : this.globalData.carts.push(item);
+    return flag;
   },
 
 
-  // 获得n分钟前的时间戳
-  beforeNowtimeByMin: function(beforetime) {
-    var setFormat = function (x) {
-      if (x < 10) x = "0" + x;
-      return x;
-    }
-    var date = new Date();
-    date.setMinutes(date.getMinutes() - beforetime);
-    var now = "";
-    now = date.getFullYear().toString();
-    now = now + (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-    now = now + setFormat(date.getDate());
-    now = now + setFormat(date.getHours());
-    now = now + setFormat(date.getMinutes());
-    now = now + setFormat(date.getSeconds());
-    return now;
-  },
+  // // --------------数据库操作----------------
 
-  // --------------数据库操作----------------
+  // // 向集合内新增记录(集合名，要添加的数据对象，回调函数)
+  // addRowToSet: function(setName,infoObject,callback){
+  //   const db = wx.cloud.database()
+  //   db.collection(setName).add({
+  //     data: infoObject,
+  //     success:callback,
+  //     fail: console.error
+  //   })
+  // },
 
-  // 向集合内新增记录(集合名，要添加的数据对象，回调函数)
-  addRowToSet: function(setName,infoObject,callback){
-    const db = wx.cloud.database()
-    db.collection(setName).add({
-      data: infoObject,
-      success:callback,
-      fail: console.error
-    })
-  },
+  // // 从集合中取出数据
+  // getInfoFromSet: function (setName,selectConditionSet,callBack){
+  //   const db = wx.cloud.database()
+  //   db.collection(setName).where(selectConditionSet).get({
+  //     success:callBack
+  //   })
+  // },
 
-  // 从集合中取出数据
-  getInfoFromSet: function (setName,selectConditionSet,callBack){
-    const db = wx.cloud.database()
-    db.collection(setName).where(selectConditionSet).get({
-      success:callBack
-    })
-  },
+  // // 从集合中筛选数据 delete
+  // getInfoWhere: function (setName,ruleObj,callback) {
+  //   const db = wx.cloud.database()
+  //   db.collection(setName).where(ruleObj)
+  //     .get({
+  //       success: callback,
+  //       fail: console.error
+  //     })
+  // },
 
-  // 从集合中筛选数据
-  getInfoWhere: function (setName,ruleObj,callback) {
-    const db = wx.cloud.database()
-    db.collection(setName).where(ruleObj)
-      .get({
-        success: callback,
-        fail: console.error
-      })
-  },
+  // // 排序后取出数据
+  // getInfoByOrder: function (setName, ruleItem, orderFuc,callback) {
+  //   const db = wx.cloud.database()
+  //   db.collection(setName)
+  //     .orderBy(ruleItem, orderFuc)
+  //     .get()
+  //     .then(callback)
+  //     .catch(console.error)
+  // },
 
-  // 排序后取出数据
-  getInfoByOrder: function (setName, ruleItem, orderFuc,callback) {
-    const db = wx.cloud.database()
-    db.collection(setName)
-      .orderBy(ruleItem, orderFuc)
-      .get()
-      .then(callback)
-      .catch(console.error)
-  },
+  // // 删除集合中的数据
+  // deleteInfoFromSet: function (setName,fruitId) {
+  //   const db = wx.cloud.database()
+  //     db.collection(setName).doc(fruitId).remove({
+  //     success: e=>{
+  //       wx.showToast({
+  //         title: '删除成功',
+  //       })
+  //       console.log(e)
+  //     },
+  //     fail: console.error
+  //   })
+  // },
 
-  // 删除集合中的数据
-  deleteInfoFromSet: function (setName,fruitId) {
-    const db = wx.cloud.database()
-      db.collection(setName).doc(fruitId).remove({
-      success: e=>{
-        wx.showToast({
-          title: '删除成功',
-        })
-        console.log(e)
-      },
-      fail: console.error
-    })
-  },
-
-  // 更新数据
-  updateInfo:function(setName,_id,updateInfoObj,callback){
-    const db = wx.cloud.database()
-    db.collection(setName).doc(_id).update({
-      data: updateInfoObj,
-      success: callback,
-      fail: console.error
-    })
-  },
+  // // 更新数据
+  // updateInfo:function(setName,_id,updateInfoObj,callback){
+  //   const db = wx.cloud.database()
+  //   db.collection(setName).doc(_id).update({
+  //     data: updateInfoObj,
+  //     success: callback,
+  //     fail: console.error
+  //   })
+  // },
 
   // 选择本地图片上传至云端
   selectImgUpToC: function (imgName,tmpUrlCallback) {

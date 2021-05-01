@@ -1,8 +1,6 @@
 // miniprogram/pages/homepage/homepage.js
 
-import { callFunction } from "../../utils/toll";
-
-
+import { callFunction, getInfoByOrder, getInforWhere, showToast } from "../../utils/toll";
 const app = getApp()
 
 Page({
@@ -19,7 +17,7 @@ Page({
     activeTypeId: 0,
     isShow:true, 
     openid: '',   
-    offLine:null  //是否维护
+    offLine: null  //是否维护
   },
 
   // 获取用户openid
@@ -29,78 +27,36 @@ Page({
         openid: res.result.openId
       })
     })
+    
   },
 
-  // ------------加入购物车------------
+  // 商品加入购物车
   addCartByHome: function(e) {
-    // console.log(e.currentTarget.dataset._id)
-    var self = this
-    let newItem = {}
-    app.getInfoWhere('fruit-board', { _id: e.currentTarget.dataset._id },
-      e => {
-        // console.log(e.data["0"])
-        var newCartItem = e.data["0"]
-        newCartItem.num = 1
-        app.isNotRepeteToCart(newCartItem)
-        wx.showToast({
-          title: '已添加至购物车',
-        })
-      }
-    )
+    // 获取商品 _id
+    const _id = e.currentTarget.dataset._id;
+    getInforWhere('fruit-board', {_id}).then(res => {
+      // 获取到新添数据
+      let newItem = res.data[0];
+      newItem.num = 1;
+      // 根据判断给出提示信息
+      let title = app.isRepet(newItem) ? "已存在!" : "添加成功";
+      showToast({title});
+    });
   },
 
 
-  // ------------分类展示切换---------
+  // 分类展示切换
   typeSwitch: function(e) {
-    // console.log(e.currentTarget.id)
     getCurrentPages()["0"].setData({
       activeTypeId: parseInt(e.currentTarget.id)
     })
-    switch (e.currentTarget.id) {
-      // 全部展示
-      case '0':
-        // debugger
-        console.log('begin');
-        app.getInfoByOrder('fruit-board', 'time', 'desc',
-          e => {
-            console.log(e.data);
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
-        break;
-      // 今日特惠
-      case '1':
-        app.getInfoWhere('fruit-board', {myClass:'1'},
-          e => {
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
-        break;
-      // 销量排行
-      case '2':
-        app.getInfoByOrder('fruit-board','time','desc',
-          e => {
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
-        break;
-      // 店主推荐
-      case '3':
-        app.getInfoWhere('fruit-board', { recommend: '1' },
-          e => {
-            getCurrentPages()["0"].setData({
-              fruitInfo: e.data
-            })
-          }
-        )
-        break;
-    }
+    const rule = ['time', 'time', 'time', 'time'];
+    getInfoByOrder("fruit-board",rule[e.currentTarget.id] ,"desc").then(res => {
+      console.log(res.data);
+      getCurrentPages()["0"].setData({
+        fruitInfo: res.data
+      })
+    })
   },
 
 
@@ -114,14 +70,10 @@ Page({
 
   // ------------生命周期函数------------
   onLoad: function (options) {
-    var that = this
-    wx.showLoading({
-      title: '生活要领鲜',
-    })
-    that.setData({
+    showToast({title: "猕猴桃大军来袭!"})
+    this.setData({
       isShow: false
     })
-    // 获取openId
     this.getOpenid();
   },
 
@@ -130,36 +82,23 @@ Page({
   },
 
   onShow: function () {
-    var that = this
-    // 水果信息
-    // app.getInfoFromSet('fruit-board', {},
-    //   e => {
-    //     // console.log(e.data)
-    //     getCurrentPages()["0"].setData({
-    //       fruitInfo: e.data,
-    //       isShow: true
-    //     })
-    //     wx.hideLoading()
-    //   }
-    // )
-    app.getInfoByOrder('fruit-board', 'time', 'desc',
-      e => {
+    getInfoByOrder('fruit-board', 'time', 'desc')
+      .then(res => {
         getCurrentPages()["0"].setData({
-          fruitInfo: e.data,
+          fruitInfo: res.data,
           isShow: true
         })
         wx.hideLoading()
-      }
-    )
-    // console.log(app.globalData.offLine)
-    // 是否下线
-    app.getInfoWhere('setting', { "option": "offLine" },
-      e => {
-        that.setData({
-          offLine: e.data["0"].offLine
-        })
-      }
-    )
+      })
+
+    // 是否下线 (暂时搁置)
+    // getInforWhere('setting', { "option": "offLine" })
+    //   .then(res => {
+    //     console.log(res);
+    //     this.setData({
+    //       offLine: res.data["0"].offLine
+    //     })
+    //   })
   },
 
   onHide: function () {
@@ -180,7 +119,7 @@ Page({
 
   onShareAppMessage: function () {
     return {
-      title: '水果园byVoyz',
+      title: '猕猴桃园',
       imageUrl: '../../images/icon/fruit.jpg',
       path: '/pages/homepage/homepage'
     }

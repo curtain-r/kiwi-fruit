@@ -15,7 +15,6 @@ Page({
 
   // 跳转至购物车
   goToCart: function() {
-    // console.log('hhhh')
     wx.switchTab({
       url: '/pages/cart/cart',
     })
@@ -59,15 +58,13 @@ Page({
     var that = this
     var newCartItem = that.data.fruitDetail
     newCartItem.num = that.data.popCartCount
-    // console.log(newCartItem)
-    app.isNotRepeteToCart(newCartItem)
+    app.isRepet(newCartItem)
     wx.showToast({
       title: '已添加至购物车',
     })
     that.setData({
       popUpHidden: true
-    })
-    // console.log(app.globalData.carts)        
+    })      
   },
 
   // 立即购买
@@ -75,13 +72,8 @@ Page({
     var that = this
     var newCartItem = that.data.fruitDetail
     newCartItem.num = that.data.popCartCount
-    // console.log(newCartItem)
-    // app.globalData.carts.push(newCartItem)
-    app.isNotRepeteToCart(newCartItem)
-    // console.log(app.globalData.carts) 
-    wx.switchTab({
-      url: '/pages/cart/cart',
-    })
+    app.isRepet(newCartItem)
+    this.goToCart()
   },
 
   // 详细信息切换
