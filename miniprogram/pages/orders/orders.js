@@ -1,7 +1,7 @@
 const app = getApp()
 
 const md5 = require("../../utils/md5.js");
-const { callFunction } = require("../../utils/toll.js");
+const { callFunction, randNum, beforeNowtimeByMin, CurrentTime } = require("../../utils/toll.js");
 
 Page({
   data: {
@@ -19,7 +19,7 @@ Page({
     // console.log(app.globalData.carts)
     
     // 32位随机字符串
-    let nonce_str = app.RndNum()
+    let nonce_str = randNum()
 
     // 获取ip地址
     wx.cloud.callFunction({
@@ -27,7 +27,6 @@ Page({
     }).then(e=>{
       if(e){
         let spbill_create_ip = e.result.body.split("query\"\:\"")[1].split("\"\,\"")[0]
-        console.log("IP地址为：" + spbill_create_ip)
         self.setData({
           spbill_create_ip: spbill_create_ip
         })
@@ -97,7 +96,7 @@ Page({
       // ------获取prepay_id，所需的签名字符串------
       var p = new Promise((resolve,reject)=>{
       // 生成订单号
-      var out_trade_no = (new Date().getTime() + app.RndNum(6)).toString()
+      var out_trade_no = (new Date().getTime() + randNum(6)).toString()
 
       // -----生成字符串------
       var stringA = 
@@ -111,8 +110,8 @@ Page({
       + "&openid="+that.data.openid
       + "&out_trade_no="+out_trade_no
       + "&spbill_create_ip="+that.data.spbill_create_ip
-      + "&time_expire="+app.beforeNowtimeByMin(-15)
-      + "&time_start="+app.CurrentTime()
+      + "&time_expire="+beforeNowtimeByMin(-15)
+      + "&time_start="+CurrentTime()
       + "&total_fee="+parseInt(that.data.total*100)
       + "&trade_type=JSAPI";
 
@@ -173,8 +172,8 @@ Page({
           '<openid>'+that.data.openid+'</openid>'+
           '<out_trade_no>'+e[2]+'</out_trade_no>'+
           '<spbill_create_ip>'+that.data.spbill_create_ip+'</spbill_create_ip>'+
-          '<time_expire>'+app.beforeNowtimeByMin(-15)+'</time_expire>'+
-          '<time_start>'+app.CurrentTime()+'</time_start>'+
+          '<time_expire>'+beforeNowtimeByMin(-15)+'</time_expire>'+
+          '<time_start>'+CurrentTime()+'</time_start>'+
           '<total_fee>'+parseInt(that.data.total * 100)+'</total_fee>'+
           '<trade_type>JSAPI</trade_type>'+
           '<sign>'+e[0]+'</sign>'+

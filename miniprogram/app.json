@@ -26,20 +26,20 @@
       {
         "pagePath": "pages/homepage/homepage",
         "text": "桃园",
-        "iconPath": "images/tabBar/homepage-sel.png",
-        "selectedIconPath": "images/tabBar/homepage.png"
+        "iconPath": "images/icon/tabBar/shop.png",
+        "selectedIconPath": "images/icon/tabBar/shop_active.png"
       },
       {
         "pagePath": "pages/cart/cart",
         "text": "购物车",
-        "iconPath": "images/tabBar/cart-sel.png",
-        "selectedIconPath": "images/tabBar/cart.png"
+        "iconPath": "images/icon/tabBar/cart.png",
+        "selectedIconPath": "images/icon/tabBar/cart_active.png"
       },
       {
         "pagePath": "pages/me/me",
         "text": "我的",
-        "iconPath": "images/tabBar/me-sel.png",
-        "selectedIconPath": "images/tabBar/me.png"
+        "iconPath": "images/icon/tabBar/prefile.png",
+        "selectedIconPath": "images/icon/tabBar/prefile_active.png"
       }
     ]
   },

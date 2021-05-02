@@ -88,7 +88,7 @@ Page({
           fruitInfo: res.data,
           isShow: true
         })
-        wx.hideLoading()
+        // wx.hideLoading()
       })
 
     // 是否下线 (暂时搁置)

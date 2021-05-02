@@ -1,3 +1,5 @@
+import { getInforWhere } from "../../utils/toll"
+
 // miniprogram/pages/detail/detail.js
 const app = getApp()
 
@@ -94,11 +96,10 @@ Page({
     that.setData({
       articleID: e._id
     })
-    app.getInfoWhere('fruit-board', { _id: e._id },
-      e => {
-        console.log(e.data["0"])
+    getInforWhere('fruit-board', { _id: e._id })
+      .then(res => {
         that.setData({
-          fruitDetail: e.data["0"]
+          fruitDetail: res.data["0"]
         })
       }
     )

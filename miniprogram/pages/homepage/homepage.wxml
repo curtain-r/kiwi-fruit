@@ -4,7 +4,7 @@
 </view>
 <view class='myHomePage' wx:if="{{isShow && !offLine}}">
   <!-- 搜索框 -->
-  <mySearch></mySearch>
+  <!-- <mySearch></mySearch> -->
   <!-- 轮播图 -->
   <view style='height:500rpx;width:100%'>
     <swiper></swiper>

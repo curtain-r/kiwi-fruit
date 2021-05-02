@@ -1,11 +1,13 @@
 <view class="main">
   <view class="form-box">
     <form bindsubmit="formSubmit">
-      <input type="text" value="{{address.name}}" name="name" placeholder="请输入收货人姓名" />
-      <input type="digit" name="phone" value="{{address.phone}}" placeholder="请输入电话号码" />
-      <picker mode="region">
-
+      <input type="text" required value="{{address.name}}" name="name" placeholder="收货人姓名" />
+      <input type="digit" required name="phone" value="{{address.phone}}" placeholder="收货人电话" />
+      <!-- 地区选择 -->
+      <picker class="region" mode="multiSelector" bindchange="func_changeCitysChange" bindcolumnchange="func_changeCitysChangeColumn" value="{{ citysIndex }}" range="{{ cityArray }}">
+        <view class="picker">请选择地址：{{ssq}}</view>
       </picker>
+      <input type="text" required value="{{address.detail}}" placeholder="请输入详细地址" name='detail' />
       <view>备注：</view>
       <view class='message'>
         <textarea name="message" value="{{address.message}}"></textarea>

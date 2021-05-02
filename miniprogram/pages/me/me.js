@@ -1,3 +1,5 @@
+import { getInforWhere } from "../../utils/toll";
+
 // page/component/new-pages/user/user.js
 const app = getApp();
 
@@ -10,8 +12,8 @@ Page({
     openid: '',
     adiminArr: [
       '',
-      'oA9Ke4tObqwxqNSfALdVZPkVv7Yc',
-      'oA9Ke4rH2nnqFgFbWIhyQu5bCXPA'
+      '',
+      ''
     ]
   },
   onLoad() {
@@ -22,10 +24,6 @@ Page({
 
   onShow() {
     var self = this;
-    // console.log(self.data)
-    /**
-     * 获取本地缓存 地址信息
-     */
     wx.getStorage({
       key: 'address',
       success: function (res) {
@@ -59,13 +57,13 @@ Page({
           openid: openid,
           isAdmin: that.data.adiminArr.indexOf(openid)
         })
-        app.getInfoWhere('order_master',{
+        getInforWhere('order_master',{
           openid: openid
-        },e=>{
+        }).then(res=>{
           var tmp = []
-          var len = e.data.length
-          for (var i = 0; i < len;i++){
-            tmp.push(e.data.pop())
+          var len = res.data.length
+          for (let i = 0; i < len;i++){
+            tmp.push(res.data.pop())
           }
           that.setData({
             orders: tmp
