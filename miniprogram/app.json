@@ -12,9 +12,9 @@
     "pages/orders/orders"
   ],
   "window": {
-    "backgroundColor": "#F0F0F0",
+    "backgroundColor": "#832F1D",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#A65C4C",
     "navigationBarTitleText": "kiwifruit",
     "navigationBarTextStyle": "black"
   },

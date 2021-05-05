@@ -12,18 +12,18 @@ Page({
     delFruitId: "",
     cardNum: 1,
     files: [],
-    time:0,
-    manageList:[], //管理页面信息列表
+    time: 0,
+    manageList: [], //管理页面信息列表
 
     // 上传的信息
-    fruitID:null, //水果编号
-    name:null,    //水果名称
-    price:null,   //价格
-    unit:null,    //单位
-    detail:"",    //描述
-    myClass:0,    //今日特惠
-    recommend:0,  //店主推荐
-    onShow:true,  //上架
+    fruitID: null, //水果编号
+    name: null,
+    price: null,
+    unit: null,
+    detail: "",
+    myClass: 0,
+    recommend: 0,
+    onShow: true,
 
     myClass_Arr: [
       '否',
@@ -33,7 +33,7 @@ Page({
       '否',
       '是'
     ],
-    reFresh:null
+    reFresh: null
   },
 
   //------------------------!!! 获取信息 !!!------------------------
@@ -73,13 +73,13 @@ Page({
         that.setData({
           files: that.data.files.concat(res.tempFilePaths)
         });
-        
-        app.upToClound("imgSwiper", that.data.name + Math.random().toString(), 
-        res.tempFilePaths["0"], tmpUrl => {
-          // console.log(tmpUrl)
-          that.data.tmpUrlArr.push(tmpUrl)
-          // console.log(getCurrentPages())
-        })
+
+        app.upToClound("imgSwiper", that.data.name + Math.random().toString(),
+          res.tempFilePaths["0"], tmpUrl => {
+            // console.log(tmpUrl)
+            that.data.tmpUrlArr.push(tmpUrl)
+            // console.log(getCurrentPages())
+          })
       }
     })
     // console.log(getCurrentPages())
@@ -120,7 +120,7 @@ Page({
   },
 
   // --------------------!!!  选项卡切换  !!!----------------------
-  tapTo1: function() {  //添加
+  tapTo1: function () { //添加
     var that = this
     that.setData({
       cardNum: 1
@@ -132,7 +132,7 @@ Page({
       cardNum: 2
     })
     // console.log(getCurrentPages())
-  }, 
+  },
   tapTo3: function () {
     var that = this
     that.setData({
@@ -142,12 +142,32 @@ Page({
 
   // ----------------------!!!  提交操作  !!!---------------------
   // 添加水果信息表单
-  addFruitInfo: function(e){
+  addFruitInfo: function (e) {
     const that = this
-    if (that.data.name && that.data.price){
+    if (that.data.name && that.data.price) {
       new Promise((resolve, reject) => {
-        const { fruitID, name, price, unit, detail, myClass, recommend, tmpUrlArr, onShow } = that.data
-        const theInfo = { fruitID, name, price, unit, detail, myClass, recommend, tmpUrlArr, onShow }
+        const {
+          fruitID,
+          name,
+          price,
+          unit,
+          detail,
+          myClass,
+          recommend,
+          tmpUrlArr,
+          onShow
+        } = that.data
+        const theInfo = {
+          fruitID,
+          name,
+          price,
+          unit,
+          detail,
+          myClass,
+          recommend,
+          tmpUrlArr,
+          onShow
+        }
         theInfo['imgUrl'] = that.data.tmpUrlArr[0]
         theInfo['time'] = parseInt(app.CurrentTime())
         resolve(theInfo)
@@ -167,30 +187,29 @@ Page({
           }
         )
       })
-    }
-    else{
+    } else {
       wx.showToast({
         title: '信息不完全',
       })
     }
-    
+
   },
 
   // ----------------------!!!  修改水果参数  !!!----------------------
   // 上架水果
-  upToLine:function(e){
+  upToLine: function (e) {
     var that = this
     // console.log(e.currentTarget.id)
-    app.updateInfo('fruit-board', e.currentTarget.id,{
+    app.updateInfo('fruit-board', e.currentTarget.id, {
       onShow: true
-    },e=>{
+    }, e => {
       that.getManageList()
       wx.showToast({
         title: '已上架',
       })
     })
   },
-  
+
   // 下架水果
   downFromLine: function (e) {
     var that = this
@@ -206,11 +225,11 @@ Page({
   },
 
   // 绑定删除水果名称参数
-  getDelFruitId: function(e) {
+  getDelFruitId: function (e) {
     var that = this
-    app.getInfoWhere('fruit-board',{
+    app.getInfoWhere('fruit-board', {
       name: e.detail.value
-    },res=>{
+    }, res => {
       that.setData({
         delFruitId: res.data["0"]._id
       })
@@ -218,14 +237,14 @@ Page({
   },
 
   // 删除水果
-  deleteFruit: function() {
+  deleteFruit: function () {
     // app.deleteInfoFromSet('fruit-board',"葡萄")
     var that = this
     console.log(that.data.delFruitId)
-    new Promise((resolve,reject)=>{
-      app.deleteInfoFromSet('fruit-board', that.data.delFruitId)
-    })
-    .then(that.getManageList())
+    new Promise((resolve, reject) => {
+        app.deleteInfoFromSet('fruit-board', that.data.delFruitId)
+      })
+      .then(that.getManageList())
   },
 
   // 程序下线打烊
@@ -235,9 +254,9 @@ Page({
       option: "offLine"
     }, res => {
       let ch = !res.data["0"].offLine
-      app.updateInfo('setting', res.data["0"]._id,{
+      app.updateInfo('setting', res.data["0"]._id, {
         offLine: ch
-      },e=>{
+      }, e => {
         wx.showToast({
           title: '操作成功',
         })
@@ -250,7 +269,7 @@ Page({
   /**
    * ----------------------!!!  生命周期函数--监听页面加载  !!!----------------------
    */
-  getManageList:function(){
+  getManageList: function () {
     var that = this
     app.getInfoByOrder('fruit-board', 'time', 'desc',
       e => {

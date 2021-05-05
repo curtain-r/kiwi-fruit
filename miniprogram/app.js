@@ -1,5 +1,7 @@
 //app.js
-import {showToast} from './utils/toll.js'
+import {
+  showToast
+} from './utils/toll.js'
 App({
   onLaunch: function () {
     // 初始化 云开发
@@ -13,16 +15,16 @@ App({
     }
 
     this.globalData = {
-      cloudRoot : "kiwifruit-2gduq14a1ae36bde/",
-      carts:[],       //购物车
+      cloudRoot: "kiwifruit-2gduq14a1ae36bde/",
+      carts: [], //购物车
       tmpNum: 0,
       tempFilePaths: "",
-      admin:["Sanguine"],
+      admin: ["Sanguine"],
       openId: null,
       appid: 'wx1fe6ff51173e8e8c',
-      mch_id: '',       // 支付码
+      mch_id: '', // 商户号
       apikey: '',
-      offLine:false,
+      offLine: false,
     }
   },
 
@@ -39,75 +41,11 @@ App({
   },
 
 
-  // // --------------数据库操作----------------
-
-  // // 向集合内新增记录(集合名，要添加的数据对象，回调函数)
-  // addRowToSet: function(setName,infoObject,callback){
-  //   const db = wx.cloud.database()
-  //   db.collection(setName).add({
-  //     data: infoObject,
-  //     success:callback,
-  //     fail: console.error
-  //   })
-  // },
-
-  // // 从集合中取出数据
-  // getInfoFromSet: function (setName,selectConditionSet,callBack){
-  //   const db = wx.cloud.database()
-  //   db.collection(setName).where(selectConditionSet).get({
-  //     success:callBack
-  //   })
-  // },
-
-  // // 从集合中筛选数据 delete
-  // getInfoWhere: function (setName,ruleObj,callback) {
-  //   const db = wx.cloud.database()
-  //   db.collection(setName).where(ruleObj)
-  //     .get({
-  //       success: callback,
-  //       fail: console.error
-  //     })
-  // },
-
-  // // 排序后取出数据
-  // getInfoByOrder: function (setName, ruleItem, orderFuc,callback) {
-  //   const db = wx.cloud.database()
-  //   db.collection(setName)
-  //     .orderBy(ruleItem, orderFuc)
-  //     .get()
-  //     .then(callback)
-  //     .catch(console.error)
-  // },
-
-  // // 删除集合中的数据
-  // deleteInfoFromSet: function (setName,fruitId) {
-  //   const db = wx.cloud.database()
-  //     db.collection(setName).doc(fruitId).remove({
-  //     success: e=>{
-  //       wx.showToast({
-  //         title: '删除成功',
-  //       })
-  //       console.log(e)
-  //     },
-  //     fail: console.error
-  //   })
-  // },
-
-  // // 更新数据
-  // updateInfo:function(setName,_id,updateInfoObj,callback){
-  //   const db = wx.cloud.database()
-  //   db.collection(setName).doc(_id).update({
-  //     data: updateInfoObj,
-  //     success: callback,
-  //     fail: console.error
-  //   })
-  // },
-
   // 选择本地图片上传至云端
-  selectImgUpToC: function (imgName,tmpUrlCallback) {
+  selectImgUpToC: function (imgName, tmpUrlCallback) {
     const self = this
     // 获取图片临时地址
-    new Promise((resolve,reject)=>{
+    new Promise((resolve, reject) => {
       wx.chooseImage({
         count: 1,
         sizeType: ['original', 'compressed'],
@@ -121,7 +59,7 @@ App({
   },
 
   // 上传图片到云端（云端文件夹，云端文件名，文件临时地址）
-  upToClound: (imgFolder, imgName, myFilePath,fileIDCallback) => {
+  upToClound: (imgFolder, imgName, myFilePath, fileIDCallback) => {
     wx.cloud.uploadFile({
       cloudPath: imgFolder + "/" + imgName, // 上传至云端的路径
       filePath: myFilePath, // 小程序临时文件路径
@@ -138,11 +76,10 @@ App({
   },
 
   // 获取云端文件tmpUrl
-  getTmpUrl: (imgFolder, imgName,currentData)=>{
+  getTmpUrl: (imgFolder, imgName, currentData) => {
     wx.cloud.getTempFileURL({
-      fileList: [getApp().globalData.cloudRoot+imgFolder + "/" + imgName],
+      fileList: [getApp().globalData.cloudRoot + imgFolder + "/" + imgName],
       success: res => {
-        // console.log(res.fileList["0"].tempFileURL)
         getCurrentPages().setData({
           currentData: res.fileList["0"].tempFileURL
         })
